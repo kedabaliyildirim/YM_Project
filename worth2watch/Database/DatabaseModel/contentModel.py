@@ -1,8 +1,6 @@
 import sys
 sys.path.append("Database")
-from DatabaseInitialization import initDatabase
-from pymongo import MongoClient
-
+from worth2watch.Database.DatabaseInitialization import initDatabase
 def createCollection():
     # Get the database
     dbname = initDatabase()
