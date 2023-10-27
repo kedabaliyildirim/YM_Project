@@ -8,8 +8,7 @@ load_dotenv()
 def initDatabase():
     databaseUsername = os.getenv('SERVER_USERNAME')
     databasepassword = os.getenv('SERVER_PASS')
-    uri = f"mongodb+srv://{databaseUsername}:{databasepassword}@cluster0.f24xmyu.mongodb.net/?retryWrites=true&w=majority"
-
+    uri = f"mongodb+srv://{databaseUsername}:{databasepassword}@cluster0.f24xmyu.mongodb.net/content_database?retryWrites=true&w=majority"
     client = MongoClient(uri, server_api=ServerApi('1'))
                             
     return client['content_database']
