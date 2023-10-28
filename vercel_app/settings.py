@@ -17,6 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 dotenv.load_dotenv()
 secret = os.getenv("SECRET_KEY")
+secureConnection = os.getenv("SECURE_CONNECTION")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -26,7 +27,7 @@ SECRET_KEY = f'{secret}'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
+ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app', 'http://localhost:5173']
 
 
 # Application definition
@@ -52,14 +53,38 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
 ROOT_URLCONF = 'vercel_app.urls'
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_METHODS = ['GET', 'POST', 'OPTIONS']
 CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
     "http://localhost:5173",
     "https://worth2-watch-front-end.vercel.app"  # Add the URL of your Vue.js app
     # Add other allowed origins as needed
 ]
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'X-CSRF-TOKEN',
+    'content-type',
+    'x-csrftoken',
+    "csrfToken",
+    'csrf_token',
+    'x-csrf-token',
+    'X-CSRFTOKEN'
+]
+CSRF_COOKIE_DOMAIN = [' http://localhost:5173']
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:5173",
+    "https://worth2-watch-front-end.vercel.app"  # Add the URL of your Vue.js app
+]
+CORS_ALLOWED_REGEXES = [
+    "http://localhost:5173",
+    "http://localhost:5173",
+    "https://worth2-watch-front-end.vercel.app"  # Add the URL of your Vue.js app
+]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
