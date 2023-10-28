@@ -55,8 +55,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'vercel_app.urls'
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    "http://localhost:5173"  # Add the URL of your Vue.js app
+    "http://localhost:5173",
+    "https://worth2-watch-front-end.vercel.app"  # Add the URL of your Vue.js app
     # Add other allowed origins as needed
 ]
 CORS_ALLOW_CREDENTIALS = True
