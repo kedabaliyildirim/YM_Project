@@ -4,7 +4,7 @@ import requests
 import dotenv
 import datetime
 from worth2watch.Database.DatabaseModel.contentModel import createCollection as collection
-from providerCall import getProviders
+from worth2watch.Database.content.providerCall import getProviders
 
 def accquireData(pageNo):
     dotenv.load_dotenv()
@@ -51,7 +51,7 @@ def accquireData(pageNo):
     # Print the formatted data
     for data in databaseOBJ:
         print("Movie Name: ", data["movieName"] + "is added to database" + "\n")
-        collection().insert_one(data)
+        collection("content").insert_one(data)
 
 for i in range(10):
     accquireData(i+1)

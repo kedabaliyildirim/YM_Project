@@ -3,7 +3,7 @@ from bson import json_util
 
 
 def getData():
-    documents = collection().find()
+    documents = collection("content").find()
 
     # Create a list to store JSON representations of documents
     json_documents = []
