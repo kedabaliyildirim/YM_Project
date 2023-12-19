@@ -1,23 +1,24 @@
 from textblob import TextBlob
-from translate_tr_eng import translate_text
 
 def sentiment_analysis(text):
     # Translate the text to English
-    english_text = translate_text(text)
+    
     
     # Create a TextBlob object
-    blob = TextBlob(english_text)
+    blob = TextBlob(text)
 
     # Perform sentiment analysis
     sentiment = blob.sentiment.polarity
 
-    # Interpret the sentiment
-    if sentiment > 0:
-        return "Positive"
-    elif sentiment < 0:
-        return "Negative"
-    else:
-        return "Neutral"
+    return sentiment
+
+    # # Interpret the sentiment
+    # if sentiment > 0:
+    #     return "Positive"
+    # elif sentiment < 0:
+    #     return "Negative"
+    # else:
+    #     return "Neutral"
 
 def main():
     # Take text input from the user
