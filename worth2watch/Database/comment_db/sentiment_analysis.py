@@ -1,35 +1,34 @@
-from textblob import TextBlob
+import nltk
+from nltk.sentiment import SentimentIntensityAnalyzer
+
+# NLTK'nin sentiment analizi için gereken kaynakları indirme
+nltk.download('vader_lexicon')
 
 def sentiment_analysis(text):
-    # Translate the text to English
+    # SentimentIntensityAnalyzer sınıfını oluştur
+    sia = SentimentIntensityAnalyzer()
+
+    # Metni analiz et ve sentiment skorlarını al
+    sentiment_scores = sia.polarity_scores(text)
+
+    # Sentiment skorlarını ekrana yazdır
+    print("Sentiment Scores:", sentiment_scores)
+
     
-    
-    # Create a TextBlob object
-    blob = TextBlob(text)
-
-    # Perform sentiment analysis
-    sentiment = blob.sentiment.polarity
-
-    return sentiment
-
-    # # Interpret the sentiment
-    # if sentiment > 0:
-    #     return "Positive"
-    # elif sentiment < 0:
-    #     return "Negative"
+    # if sentiment_scores['compound'] >= 0.05:
+    #     sentiment = 'Positive'
+    # elif sentiment_scores['compound'] <= -0.05:
+    #     sentiment = 'Negative'
     # else:
-    #     return "Neutral"
+    #     sentiment = 'Neutral'
 
-def main():
-    # Take text input from the user
-    text = input("Enter the text for sentiment analysis: ")
+    return sentiment_scores['compound']/0.6369
 
-    # Perform sentiment analysis
-    result = sentiment_analysis(text)
+# # Duygu analizi yapılacak metni girin
+# text_to_analyze = "I don't like it"
 
-    # Print the result to the screen
-    print(f"Sentiment of the text: {result}")
+# # Duygu analizini yap
+# result = sentiment_analysis(text_to_analyze)
 
-# Call the main function
-if __name__ == "__main__":
-    main()
+# # Sonucu ekrana yazdır
+# print("Sentiment:", result)
