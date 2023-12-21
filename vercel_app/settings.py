@@ -28,7 +28,7 @@ SECRET_KEY = f'{secret}'
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app',
-                 'http://localhost:5173', '14b4-188-3-98-176.ngrok-free.app']
+                 'http://localhost:5173', 'worth2-watch-front-end.vercel.app']
 
 
 # Application definition
