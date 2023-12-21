@@ -4,15 +4,15 @@ import base64
 
 
 def isAuth(payload):
-    print(payload)
     authState = collection('admin').find_one({'auth_string.token': payload})
-    checkExpiration  = authState['auth_string']['auth_expiration_date'] > datetime.datetime.now()
-    if(checkExpiration):
-        print('auth is valid')
+    checkExpiration = authState['auth_string']['auth_expiration_date'] > datetime.datetime.now(
+    )
+    if (checkExpiration):
         return True
-    else: 
+    else:
         print('auth is not valid')
-        collection('admin').update_one({'auth_string.token': payload}, {'$unset': {'auth_string': ''}})
+        collection('admin').update_one(
+            {'auth_string.token': payload}, {'$unset': {'auth_string': ''}})
         return False
     # return True if authState is not None else False
 

@@ -1,7 +1,5 @@
 
-from django.http import JsonResponse
-from bcrypt import hashpw, gensalt, checkpw
-from bson import json_util
+from bcrypt import checkpw
 from worth2watch.Database.admin.adminLogins import logInAdmin
 
 
