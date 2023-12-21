@@ -86,7 +86,9 @@ CSRF_COOKIE_DOMAIN = [' http://localhost:5173']
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5173",
-    "https://worth2-watch-front-end.vercel.app"  # Add the URL of your Vue.js app
+    "https://worth2-watch-front-end.vercel.app",
+  'worth2-watch-front-end.vercel.app'
+  # Add the URL of your Vue.js app
 ]
 CORS_ALLOWED_REGEXES = [
     "http://localhost:5173",
