@@ -27,8 +27,7 @@ SECRET_KEY = f'{secret}'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app',
-                 'http://localhost:5173', 'worth2-watch-front-end.vercel.app']
+ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app', 'http://localhost:5173']
 
 
 # Application definition
@@ -38,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'rest_framework',
     'rest_framework_simplejwt',
-    'django_extensions',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -86,9 +84,7 @@ CSRF_COOKIE_DOMAIN = [' http://localhost:5173']
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5173",
-    "https://worth2-watch-front-end.vercel.app",
-  'worth2-watch-front-end.vercel.app'
-  # Add the URL of your Vue.js app
+    "https://worth2-watch-front-end.vercel.app"  # Add the URL of your Vue.js app
 ]
 CORS_ALLOWED_REGEXES = [
     "http://localhost:5173",
