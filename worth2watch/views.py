@@ -22,7 +22,7 @@ def index(request):
     sort_by = payload.get('sort_by', 'movieName')
     sort_order = payload.get('sort_order', -1)
     document = getPaginatedData(page, page_size, sort_by, sort_order)
-    return JsonResponse({'status': 'ok'})
+    return JsonResponse(document, safe=False)
 
 def total_pages(request):
     page_size = int(request.GET.get('page_size', 20))
