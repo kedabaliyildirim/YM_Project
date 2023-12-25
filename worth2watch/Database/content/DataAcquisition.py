@@ -162,8 +162,7 @@ def get_popular_movies():
                                     "movieProvider": movie_providers if movie_providers is not None else None
                                 })
                             else:
-                                print(f"Error processing movie {
-                                      movieTitle}: Incomplete data")
+                                print(f"Error processing movie {movieTitle}: Incomplete data")
                         else:
                             print(f"Error processing movie {movieTitle}: No data returned")
             except ValueError as e:
