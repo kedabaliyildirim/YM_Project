@@ -33,7 +33,7 @@ to clone
 
 After cloning the repo, create a virtual environment and activate it
 
-    source w2w/bin/activate
+        .\w2w\Scripts\activate
 
 to install requirements
 use
