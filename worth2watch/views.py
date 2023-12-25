@@ -16,12 +16,12 @@ from django.http import JsonResponse
 @csrf_exempt
 @require_POST
 def index(request):
-    # payload = json.loads(request.body.decode('utf-8'))
-    # page = payload.get('page', 1)
-    # page_size = payload.get('page_size', 20)
-    # sort_by = payload.get('sort_by', 'movieName')
-    # sort_order = payload.get('sort_order', -1)
-    # document = getPaginatedData(page, page_size, sort_by, sort_order)
+    payload = json.loads(request.body.decode('utf-8'))
+    page = payload.get('page', 1)
+    page_size = payload.get('page_size', 20)
+    sort_by = payload.get('sort_by', 'movieName')
+    sort_order = payload.get('sort_order', -1)
+    document = getPaginatedData(page, page_size, sort_by, sort_order)
     return JsonResponse({'status': 'ok'})
 
 def total_pages(request):
