@@ -81,15 +81,12 @@ def accquireData(year):
                                     "movieProvider": movie_providers if movie_providers is not None else None
                                 })
                             else:
-                                print(f"Error processing movie {
-                                      movieTitle}: Incomplete data")
+                                print(f"Error processing movie {movieTitle}: Incomplete data")
                         else:
-                            print(f"Error processing movie {
-                                  movieTitle}: No data returned")
+                            print(f"Error processing movie {movieTitle}: No data returned")
             except ValueError as e:
                 # Handle the case when release_date is not a valid date
-                print(f"Error processing release_date for movie {
-                      movieTitle}: {e}")
+                print(f"Error processing release_date for movie {movieTitle}: {e}")
 
     # Print the formatted data
     for data in databaseOBJ:
@@ -169,8 +166,7 @@ def get_popular_movies():
                                 print(f"Error processing movie {
                                       movieTitle}: Incomplete data")
                         else:
-                            print(f"Error processing movie {
-                                  movieTitle}: No data returned")
+                            print(f"Error processing movie {movieTitle}: No data returned")
             except ValueError as e:
                 # Handle the case when release_date is not a valid date
                 print(f"Error processing release_date for movie ", {movieTitle}, {e})
