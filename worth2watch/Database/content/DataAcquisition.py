@@ -29,8 +29,8 @@ def accquireData(year):
 
     for i in range(1, 4):
         avarage = (i * 2) - 1
-        contentURI = f"https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&page=1&sort_by=vote_count.desc&vote_average.lte={
-            avarage}&year={year}"
+        contentURI = f"https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&page=1&sort_by=vote_count.desc&vote_average.lte={average}&year={year}"
+
 
         headers = {
             "accept": "application/json",

@@ -28,7 +28,8 @@ def getPaginatedData(page, page_size, sort_by, sort_order):
             coll = collection("content").find({}).sort([(sort_by, order)]).skip(
                 (page - 1) * page_size).limit(page_size)
         else:
-            coll = collection("content").find({})
+            coll = collection("content").find({}).sort(sort_by, order).skip(
+                (page - 1) * page_size).limit(page_size)
 
         for doc in coll:
             json_docs.append(json_util.dumps(doc, default=json_util.default))
