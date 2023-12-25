@@ -5,7 +5,7 @@ from worth2watch.views import index
 
 urlpatterns = [
 
-    path('allmovies', index)
+    # path('allmovies', index)
     # path('totalpages', total_pages),
 
 
