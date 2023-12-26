@@ -10,7 +10,7 @@ from worth2watch.Database.content.content_csv_creator import create_csv_from_dat
 from worth2watch.Database.content.database_removal import removeData
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from worth2watch.agent_main.agent_main import agent_movie_caller
+# from worth2watch.agent_main.agent_main import agent_movie_caller
 from django.http import JsonResponse
 
 
@@ -170,15 +170,15 @@ def create_csv(request):
 #     return JsonResponse(top_ten, safe=False)
 
 
-@csrf_exempt
-@require_POST
-def pull_comments(request):
-    payload = json.loads(request.body.decode('utf-8'))
-    if isAuth(payload.get('authToken')):
-        print("@pull_comments")
-        is_reddit = payload.get('platform') == 'reddit'
-        is_youtube = payload.get('platform') == 'youtube'
-        agent_movie_caller(reddit_status=is_reddit, youtube_status=is_youtube)
-        return JsonResponse({'status': 'ok'})
-    else:
-        return JsonResponse({'status': 'not authorized'})
+# @csrf_exempt
+# @require_POST
+# def pull_comments(request):
+#     payload = json.loads(request.body.decode('utf-8'))
+#     if isAuth(payload.get('authToken')):
+#         print("@pull_comments")
+#         is_reddit = payload.get('platform') == 'reddit'
+#         is_youtube = payload.get('platform') == 'youtube'
+#         agent_movie_caller(reddit_status=is_reddit, youtube_status=is_youtube)
+#         return JsonResponse({'status': 'ok'})
+#     else:
+#         return JsonResponse({'status': 'not authorized'})
