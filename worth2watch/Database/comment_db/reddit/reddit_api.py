@@ -1,5 +1,4 @@
 import requests
-import json
 import os
 
 
@@ -8,9 +7,7 @@ def search_reddit(movie_name, search_limit, thread_depth, comment_limit):
     client_secret = os.getenv('REDDIT_API_KEY')
 
     auth_url = 'https://www.reddit.com/api/v1/access_token'
-    auth_data = {
-        'grant_type': 'client_credentials',
-    }
+    auth_data = {'grant_type': 'client_credentials',}
 
     auth_response = requests.post(
         auth_url,
@@ -32,17 +29,14 @@ def search_reddit(movie_name, search_limit, thread_depth, comment_limit):
         'sort': 'relevance',
     }
 
-    headers = {'Authorization': f'bearer {
-        access_token}', 'User-Agent': 'worth2watch'}
+    headers = {'Authorization': f'bearer {access_token}', 'User-Agent': 'worth2watch'}
     search_response = requests.get(search_url, headers=headers, params=params)
-    post_ids = [child['data']['id']
-                for child in search_response.json()['data']['children']]
+    post_ids = [child['data']['id'] for child in search_response.json()['data']['children']]
 
     all_comments = []
 
     for post_id in post_ids:
-        comment_url = f'https://oauth.reddit.com/r/{
-            subreddit}/comments/{post_id}.json'
+        comment_url = f'https://oauth.reddit.com/r/{subreddit}/comments/{post_id}.json'
         idParams = {
             'depth': thread_depth,
             'limit': comment_limit,
