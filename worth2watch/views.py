@@ -6,7 +6,7 @@ from worth2watch.Users.Admin.loginResponse import adminLoginResponse
 from worth2watch.Database.content.DatabaseRequests import getPaginatedData, getRequestedMovie, getSearchedMovie, totalPages
 from worth2watch.Database.admin.admin_IO import admin_creation, admin_list, admin_removal, admin_password_change
 from worth2watch.Database.content.content_csv_creator import create_csv_from_database
-# from worth2watch.Database.content.DataAcquisition import accquireData
+from worth2watch.Database.content.DataAcquisition import accquireData
 from worth2watch.Database.content.database_removal import removeData
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
