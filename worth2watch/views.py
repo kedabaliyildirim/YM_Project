@@ -177,7 +177,6 @@ def get_top_ten(request):
 def pull_comments(request):
     payload = json.loads(request.body.decode('utf-8'))
     if isAuth(payload.get('authToken')):
-        print("@pull_comments")
         is_reddit = payload.get('platform') == 'reddit'
         is_youtube = payload.get('platform') == 'youtube'
         agent_movie_caller(reddit_status=is_reddit, youtube_status=is_youtube)
