@@ -1,4 +1,4 @@
-# from worth2watch.Database.comment_db.reddit.reddit_api import search_reddit
+from worth2watch.Database.comment_db.reddit.reddit_api import search_reddit
 from worth2watch.Database.comment_db.youtube.yt_trailer_comments import get_youtube_comments
 from worth2watch.Database.comment_db.comment_requests import movie_names
 def main_agent(movie_name, reddit_status, youtube_status):
