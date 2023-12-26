@@ -2,10 +2,8 @@ from worth2watch.Database.DatabaseModel.contentModel import createCollection as 
 from bson import json_util
 from bson.objectid import ObjectId
 from worth2watch.Database.content.DataAcquisition import get_popular_movies
-from worth2watch.Database.DatabaseInitialization import initDatabase
 import json
 from pymongo import DESCENDING, ASCENDING
-import pymongo
 import datetime
 
 def get_all_movies():
@@ -177,3 +175,5 @@ def acquire_top_ten():
         databaseOBJ = collection("popular_movies").find({}).limit(10)
         json_documents = [json_util.dumps(doc) for doc in databaseOBJ]
         return json_documents
+
+

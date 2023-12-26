@@ -8,6 +8,7 @@ from pymongo.errors import DuplicateKeyError
 from worth2watch.Database.DatabaseModel.contentModel import createCollection as collection
 from worth2watch.Database.content.providerCall import getProvidersWithRetry
 from worth2watch.Database.content.omdb_acquasition import get_movie_data
+from worth2watch.agent_main.agent_main import main_agent
 
 
 path_name = os.path.dirname(os.path.realpath(__file__))
@@ -27,8 +28,8 @@ def accquireData(year):
     databaseOBJ = []
 
     for i in range(1, 4):
-        avrge = (i * 2) - 1
-        contentURI = f"https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&page=1&sort_by=vote_count.desc&vote_average.lte={avrge}&year={year}"
+        avg = (i * 2) - 1
+        contentURI = f"https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&page=1&sort_by=vote_count.desc&vote_average.lte={avg}&year={year}"
 
 
         headers = {
@@ -92,13 +93,15 @@ def accquireData(year):
         try:
             # Attempt to insert the document
             collection("content").insert_one(data)
+            main_agent(data['movieName'], True, True, str(data['_id']))
             print("Movie Name:", data["movieName"],
                   "is added to the database\n")
         except DuplicateKeyError:
             # Handle the case when a document with the same movieName already exists
             print("Error: Duplicate movieName -",
                   data["movieName"], "Skipping...\n")
-
+        except Exception as e:
+            print(f"Error: {e}")
 
 
 
@@ -175,8 +178,11 @@ def get_popular_movies():
             collection("popular_movies").insert_one(data)
             data["expiry_date"] = None
             collection("content").insert_one(data)
+            main_agent(data['movieName'], True, True, str(data['_id']))
             print("Movie Name:", data["movieName"], " is added to the database\n")
         except DuplicateKeyError:
             # Handle the case when a document with the same movieName already exists
             print("Error: Duplicate movieName -",
                   data["movieName"], "Skipping...\n")
+        except Exception as e:
+            print(f"Error: {e}")

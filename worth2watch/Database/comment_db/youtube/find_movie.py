@@ -22,7 +22,6 @@ def get_youtube_video_id(api_key, query):
     return video_id
 
 # if __name__ == '__main__':
-#     api_key = 'AIzaSyCi9sy_YYyqLvfp9kB3DSy7POZyutFhhIg'
 #     search_query = 'Avengers Infinity War'
 
 #     video_id = get_youtube_video_id(api_key, search_query)

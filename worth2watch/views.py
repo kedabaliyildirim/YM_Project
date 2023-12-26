@@ -10,6 +10,7 @@ from worth2watch.Database.content.DataAcquisition import accquireData
 from worth2watch.Database.content.database_removal import removeData
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from worth2watch.agent_main.agent_main import agent_movie_caller
 from django.http import JsonResponse
 
 
@@ -23,6 +24,7 @@ def index(request):
     sort_order = payload.get('sort_order', -1)
     document = getPaginatedData(page, page_size, sort_by, sort_order)
     return JsonResponse(document, safe=False)
+
 
 def total_pages(request):
     page_size = int(request.GET.get('page_size', 20))
@@ -50,6 +52,7 @@ def logInAdmin(request):
     else:
         return JsonResponse({'status': 'wrong password'})
 
+
 @csrf_exempt
 @require_POST
 def register_admin(request):
@@ -62,6 +65,7 @@ def register_admin(request):
     else:
         return JsonResponse({'status': 'not authorized'})
 
+
 @csrf_exempt
 def get_admin_list(request):
     if isAuth(request.body.decode('utf-8')):
@@ -69,6 +73,7 @@ def get_admin_list(request):
         return JsonResponse(ad_list, safe=False)
     else:
         return JsonResponse({'status': 'not authorized'})
+
 
 @csrf_exempt
 @require_POST
@@ -82,6 +87,7 @@ def change_admin_password(request):
     else:
         return JsonResponse({'status': 'not authorized'})
 
+
 @csrf_exempt
 @require_POST
 def remove_admin(request):
@@ -93,6 +99,7 @@ def remove_admin(request):
             return JsonResponse({'status': 'unexpected error'})
     else:
         return JsonResponse({'status': 'not authorized'})
+
 
 @csrf_exempt
 @require_POST
@@ -136,7 +143,8 @@ def pull_content(request):
         return JsonResponse({'status': 'ok'})
     else:
         return JsonResponse({'status': 'not authorized'})
-    
+
+
 @csrf_exempt
 @require_POST
 def drop_database(request):
@@ -155,10 +163,22 @@ def create_csv(request):
     return JsonResponse({'status': 'ok'})
 
 
-
 @csrf_exempt
 def get_top_ten(request):
     print("@get_top_ten")
     top_ten = acquire_top_ten()
-    print(top_ten)
     return JsonResponse(top_ten, safe=False)
+
+
+@csrf_exempt
+@require_POST
+def pull_comments(request):
+    payload = json.loads(request.body.decode('utf-8'))
+    if isAuth(payload.get('authToken')):
+        print("@pull_comments")
+        is_reddit = payload.get('platform') == 'reddit'
+        is_youtube = payload.get('platform') == 'youtube'
+        agent_movie_caller(reddit_status=is_reddit, youtube_status=is_youtube)
+        return JsonResponse({'status': 'ok'})
+    else:
+        return JsonResponse({'status': 'not authorized'})
