@@ -13,8 +13,9 @@ def main_agent(movie_name, reddit_status, youtube_status, movie_id):
     add_comments_to_movie(movie_id=movie_id, reddit_comments=reddit_comments, youtube_comments=youtube_comments)
     return {"status": "ok"}
 # print(main_agent("Avengers Infinity War", True, True))
-def agent_movie_caller(is_reddit, is_youtube):
+
+
+def agent_movie_caller(reddit_status, youtube_status):
     movie_names_list = movie_names()
     for movie in movie_names_list:
-        # main_agent(movie['movieName'], reddit_status= is_reddit, youtube_status= is_youtube, movie_id= movie['movieId'])
-        print("movie name: ", movie['movieName'], "movie id: ", movie['movieId'])
+        main_agent(movie['movieName'], reddit_status= reddit_status, youtube_status= youtube_status, movie_id= movie['movieId'])
