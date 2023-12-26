@@ -62,11 +62,6 @@ def search_reddit(movie_name, search_limit, thread_depth, comment_limit):
                 all_comments.append(comment_dict)
 
     # Convert the list of dictionaries to a JSON string
-    json_comments = json.dumps(all_comments, indent=2)
-
-    # Optionally, you can save the JSON string to a file
-    with open('comments.json', 'w') as json_file:
-        json_file.write(json_comments)
 
     return all_comments
 
