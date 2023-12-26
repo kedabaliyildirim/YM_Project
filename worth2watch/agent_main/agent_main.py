@@ -3,7 +3,7 @@ from worth2watch.Database.comment_db.youtube.yt_trailer_comments import get_yout
 from worth2watch.Database.comment_db.comment_requests import movie_names
 def main_agent(movie_name, reddit_status, youtube_status):
     if reddit_status:
-        reddit_comments = search_reddit(movie_name, comment_limit=100, search_limit=1, thread_depth=1)
+        reddit_comments = search_reddit(movie_name, comment_limit=50, search_limit=1, thread_depth=1)
     # if youtube_status:
         # youtube_comments = get_youtube_comments(movie_name, 100)
     # return reddit_comments, youtube_comments
