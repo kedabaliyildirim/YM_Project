@@ -11,5 +11,4 @@ def main_agent(movie_name, reddit_status, youtube_status):
 def agent_movie_caller(is_reddit, is_youtube):
     movie_names_list = movie_names()
     for movie in movie_names_list:
-        print(movie['movieId'])
         main_agent(movie['movieName'], reddit_status= is_reddit, youtube_status= is_youtube)
