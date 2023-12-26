@@ -1,4 +1,3 @@
-import json
 import os
 import requests
 from bson import json_util
@@ -29,8 +28,8 @@ def accquireData(year):
 
     for i in range(1, 4):
         avarage = (i * 2) - 1
-        contentURI = f"https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&page=1&sort_by=vote_count.desc&vote_average.lte={
-            avarage}&year={year}"
+        contentURI = f"https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&page=1&sort_by=vote_count.desc&vote_average.lte={average}&year={year}"
+
 
         headers = {
             "accept": "application/json",
@@ -81,15 +80,12 @@ def accquireData(year):
                                     "movieProvider": movie_providers if movie_providers is not None else None
                                 })
                             else:
-                                print(f"Error processing movie {
-                                      movieTitle}: Incomplete data")
+                                print(f"Error processing movie {movieTitle}: Incomplete data")
                         else:
-                            print(f"Error processing movie {
-                                  movieTitle}: No data returned")
+                            print(f"Error processing movie {movieTitle}: No data returned")
             except ValueError as e:
                 # Handle the case when release_date is not a valid date
-                print(f"Error processing release_date for movie {
-                      movieTitle}: {e}")
+                print(f"Error processing release_date for movie {movieTitle}: {e}")
 
     # Print the formatted data
     for data in databaseOBJ:
@@ -166,11 +162,9 @@ def get_popular_movies():
                                     "movieProvider": movie_providers if movie_providers is not None else None
                                 })
                             else:
-                                print(f"Error processing movie {
-                                      movieTitle}: Incomplete data")
+                                print(f"Error processing movie {movieTitle}: Incomplete data")
                         else:
-                            print(f"Error processing movie {
-                                  movieTitle}: No data returned")
+                            print(f"Error processing movie {movieTitle}: No data returned")
             except ValueError as e:
                 # Handle the case when release_date is not a valid date
                 print(f"Error processing release_date for movie ", {movieTitle}, {e})
