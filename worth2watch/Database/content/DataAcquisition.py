@@ -93,7 +93,7 @@ def accquireData(year):
         try:
             # Attempt to insert the document
             collection("content").insert_one(data)
-            main_agent(data['movieName'], True, True, str(data['_id']))
+            main_agent(movie_name=data['movieName'], reddit_status=True,youtube_status=True, movie_id=str(data['_id']))
             print("Movie Name:", data["movieName"],
                   "is added to the database\n")
         except DuplicateKeyError:
@@ -178,7 +178,7 @@ def get_popular_movies():
             collection("popular_movies").insert_one(data)
             data["expiry_date"] = None
             collection("content").insert_one(data)
-            main_agent(data['movieName'], True, True, str(data['_id']))
+            main_agent(movie_name=data['movieName'],reddit_status= True, youtube_status= True, movie_id=str(data['_id']))
             print("Movie Name:", data["movieName"], " is added to the database\n")
         except DuplicateKeyError:
             # Handle the case when a document with the same movieName already exists
