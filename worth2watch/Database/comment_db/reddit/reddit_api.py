@@ -38,8 +38,7 @@ def search_reddit(movie_name, search_limit, thread_depth, comment_limit):
     all_comments = []
 
     for post_id in post_ids:
-        comment_url = f'https://oauth.reddit.com/r/{
-            subreddit}/comments/{post_id}.json'
+        comment_url = f'https://oauth.reddit.com/r/{subreddit}/comments/{post_id}.json'
         idParams = {
             'depth': thread_depth,
             'limit': comment_limit,
