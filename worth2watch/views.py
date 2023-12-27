@@ -179,12 +179,12 @@ def get_top_ten(request):
 def pull_comments(request):
     payload = json.loads(request.body.decode('utf-8'))
     if isAuth(payload.get('authToken')):
-        is_reddit = payload.get('platform') == 'reddit'
-        is_youtube = payload.get('platform') == 'youtube'
-        movie_name = payload.get('movie') == 'movieName'
-        print(payload.get('movie'))
-        movie_id = payload.get('movie') == 'movieId'
-        # main_agent(movie_name=movie_name, movie_id= movie_id, reddit_status=is_reddit, youtube_status=is_youtube)
+        is_reddit = payload.get('platform')['reddit']
+        is_youtube = payload.get('platform')['youtube']
+        movie_name = payload.get('movie')['movieName']
+        movie_id = payload.get('movie')['movieId']
+        # print("is_reddit: ", is_reddit, " is_youtube: ", is_youtube, " movie_name: ", movie_name, " movie_id: ", movie_id)
+        main_agent(movie_name=movie_name, movie_id= movie_id, reddit_status=is_reddit, youtube_status=is_youtube)
         return JsonResponse({'status': 'ok'})
     else:
         return JsonResponse({'status': 'not authorized'})
