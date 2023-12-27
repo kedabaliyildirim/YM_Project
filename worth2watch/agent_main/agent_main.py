@@ -7,7 +7,7 @@ def main_agent(movie_name, movie_id, reddit_status, youtube_status):
     else:
         reddit_comments = []
     if youtube_status:
-        youtube_comments = get_youtube_comments(movie_name, 100)
+        youtube_comments = get_youtube_comments(movie_name, 50)
     else:
         youtube_comments = []
     add_comments_to_movie(movie_id=movie_id, reddit_comments=reddit_comments, youtube_comments=youtube_comments)

@@ -18,7 +18,7 @@ def get_comment_text(video_id, api_key, maxResults=100):
     comments = []
     for item in response.get('items', []):
         comment_dict = {
-            "author": item.get('snippet', {}).get('topLevelComment', {}).get('snippet', {}).get('authorDisplayName', ''),
+            # "author": item.get('snippet', {}).get('topLevelComment', {}).get('snippet', {}).get('authorDisplayName', ''),
             "comment": item.get('snippet', {}).get('topLevelComment', {}).get('snippet', {}).get('textOriginal', '')
         }
         comments.append(comment_dict)

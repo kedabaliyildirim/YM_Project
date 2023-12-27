@@ -16,6 +16,7 @@ def movie_names():
 
 def add_comments_to_movie(movie_id, reddit_comments, youtube_comments):
     filter_criteria = {"_id": ObjectId(movie_id)}
+    print(reddit_comments)
     update_data = {
         "$set": {
             "Comments": {
