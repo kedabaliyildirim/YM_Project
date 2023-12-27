@@ -45,15 +45,12 @@ def search_reddit(movie_name, search_limit, thread_depth, comment_limit):
         }
         comment_response = requests.get(
             comment_url, headers=headers, params=idParams)
-        print(comment_response.status_code)
         if comment_response.status_code == 404:
             continue  # Skip if the post is not found
 
         comments_data = comment_response.json()
-        print(comments_data)
         for comment in comments_data[1]['data']['children']:
             try:
-                print(comment['data']['body'])
                 if 'body' in comment['data']:
                     comment_dict = {
                         # "author": comment['data']['author'],
