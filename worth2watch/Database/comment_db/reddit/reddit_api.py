@@ -29,8 +29,7 @@ def search_reddit(movie_name, search_limit, thread_depth, comment_limit):
         'sort': 'relevance',
     }
 
-    headers = {'Authorization': f'bearer {
-        access_token}', 'User-Agent': 'worth2watch'}
+    headers = {'Authorization': f'bearer {access_token}', 'User-Agent': 'worth2watch'}
     search_response = requests.get(search_url, headers=headers, params=params)
     post_ids = [child['data']['id']
                 for child in search_response.json()['data']['children']]
