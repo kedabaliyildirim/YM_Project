@@ -14,9 +14,8 @@ def movie_names():
     return movie_names
 
 
-def add_comments_to_movie(movie_id, reddit_comments, youtube_comments):
-    filter_criteria = {"_id": ObjectId(movie_id)}
-    print(reddit_comments)
+def add_comments_to_movie(movie_name, reddit_comments, youtube_comments):
+    print("@add_comments_to_movie for : ", movie_name, "reddit_comments: ", len(reddit_comments), "youtube_comments: ", len(youtube_comments))
     update_data = {
         "$set": {
             "Comments": {
@@ -25,4 +24,4 @@ def add_comments_to_movie(movie_id, reddit_comments, youtube_comments):
             }
         }
     }
-    collection("content").update_one(filter_criteria, update_data)
+    collection("content").update_one({'movieName' : movie_name}, update_data)
