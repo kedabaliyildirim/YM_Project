@@ -1,34 +1,46 @@
-# import nltk
-# from nltk.sentiment import SentimentIntensityAnalyzer
+from transformers import pipeline
 
-# # NLTK'nin sentiment analizi için gereken kaynakları indirme
-# nltk.download('vader_lexicon')
+def analyze_sentiment_transformers(sentence, model_name="distilbert-base-uncased-finetuned-sst-2-english"):
+    sentiment_analyzer = pipeline("sentiment-analysis", model=model_name, revision="714eb0f")
+    result = sentiment_analyzer(sentence)[0]
+    sentiment_type = result['label']
+    return sentiment_type
 
-# def sentiment_analysis(text):
-#     # SentimentIntensityAnalyzer sınıfını oluştur
-#     sia = SentimentIntensityAnalyzer()
+def analyze_sentiments(sentences, model_name="distilbert-base-uncased-finetuned-sst-2-english"):
+    sentiments = [analyze_sentiment_transformers(sentence, model_name) for sentence in sentences]
+    return sentiments
 
-#     # Metni analiz et ve sentiment skorlarını al
-#     sentiment_scores = sia.polarity_scores(text)
-
-#     # Sentiment skorlarını ekrana yazdır
-#     print("Sentiment Scores:", sentiment_scores)
-
+def calculate_sentiment_ratios(sentiments):
+    positive_count = sentiments.count("POSITIVE")
+    negative_count = sentiments.count("NEGATIVE")
+    total_count = len(sentiments)
     
-#     # if sentiment_scores['compound'] >= 0.05:
-#     #     sentiment = 'Positive'
-#     # elif sentiment_scores['compound'] <= -0.05:
-#     #     sentiment = 'Negative'
-#     # else:
-#     #     sentiment = 'Neutral'
+    positive_ratio = (positive_count / total_count)
+    negative_ratio = (negative_count / total_count)
+    
+    return positive_ratio, negative_ratio, total_count
 
-#     return sentiment_scores['compound']/0.6369
+def analyze_and_summarize_sentiments(sentences, model_name="distilbert-base-uncased-finetuned-sst-2-english"):
+    sentiments = analyze_sentiments(sentences, model_name)
+    positive_ratio, negative_ratio, total_count = calculate_sentiment_ratios(sentiments)
+    
+    result_dict = {
+        "sentiments": sentiments,
+        "positive_ratio": positive_ratio,
+        "negative_ratio": negative_ratio,
+        "total_count": total_count
+    }
+    
+    return result_dict
 
-# # # Duygu analizi yapılacak metni girin
-# # text_to_analyze = "I don't like it"
+# Test etmek için örnek bir kullanım
+sentences_to_analyze = ["This is a positive sentence.", "This is a negative sentence.", "Another positive one."]
+result = analyze_and_summarize_sentiments(sentences_to_analyze)
 
-# # # Duygu analizini yap
-# # result = sentiment_analysis(text_to_analyze)
+print("Sentiments:", result["sentiments"])
+# Assuming result is a dictionary with "positive_ratio" and "negative_ratio" keys
 
-# # # Sonucu ekrana yazdır
-# # print("Sentiment:", result)
+print("Positive Ratio: {:.2f}%".format(result["positive_ratio"] * 100))
+print("Negative Ratio: {:.2f}%".format(result["negative_ratio"] * 100))
+
+print("Total Count:", result["total_count"])
