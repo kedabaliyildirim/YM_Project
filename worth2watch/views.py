@@ -1,13 +1,13 @@
 import json
 from django.http import JsonResponse
 from worth2watch.Database.admin.adminLogins import isAuth
-from worth2watch.Database.comment_db.comment_requests import movie_names
+from worth2watch.Database.comment_db.comment_requests import get_comments, movie_names
 from worth2watch.Users.Admin.loginResponse import adminLoginResponse
 
 from worth2watch.Database.content.DatabaseRequests import acquire_top_ten, getPaginatedData, getRequestedMovie, getSearchedMovie, totalPages
 from worth2watch.Database.admin.admin_IO import admin_creation, admin_list, admin_removal, admin_password_change
 from worth2watch.Database.content.content_csv_creator import create_csv_from_database
-from worth2watch.Database.content.DataAcquisition import accquireData
+from worth2watch.Database.content.DataAcquisition import accquireData, get_popular_movies
 from worth2watch.Database.content.database_removal import removeData
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -182,9 +182,8 @@ def pull_comments(request):
         is_reddit = payload.get('platform')['reddit']
         is_youtube = payload.get('platform')['youtube']
         movie_name = payload.get('movie')['movieName']
-        movie_id = payload.get('movie')['movieId']
         # print("is_reddit: ", is_reddit, " is_youtube: ", is_youtube, " movie_name: ", movie_name, " movie_id: ", movie_id)
-        main_agent(movie_name=movie_name, movie_id= movie_id, reddit_status=is_reddit, youtube_status=is_youtube)
+        main_agent(movie_name=movie_name, reddit_status=is_reddit, youtube_status=is_youtube)
         return JsonResponse({'status': 'ok'})
     else:
         return JsonResponse({'status': 'not authorized'})
@@ -193,8 +192,30 @@ def pull_comments(request):
 @require_POST
 def get_movie_names(request):
     payload = json.loads(request.body.decode('utf-8'))
-    if isAuth(payload.get('authToken')):        
+    if isAuth(payload.get('authToken')):
         movie_name = movie_names()
         return JsonResponse(movie_name, safe=False)
+    else:
+        return JsonResponse({'status': 'not authorized'})
+    
+
+@csrf_exempt
+@require_POST
+def test_popular_database(request):
+    payload = json.loads(request.body.decode('utf-8'))
+    if isAuth(payload.get('authToken')):
+        get_popular_movies()
+        return JsonResponse({'status': 'ok'})
+    else:
+        return JsonResponse({'status': 'not authorized'})
+    
+
+@csrf_exempt
+@require_POST
+def get_all_comments(request):
+    payload = json.loads(request.body.decode('utf-8'))
+    if isAuth(payload.get('authToken')):
+        comments = get_comments()
+        return JsonResponse(comments, safe=False)
     else:
         return JsonResponse({'status': 'not authorized'})

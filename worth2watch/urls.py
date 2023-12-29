@@ -1,6 +1,6 @@
 # example/urls.py
 from django.urls import path
-from worth2watch.views import get_top_ten, index, logInAdmin, getAuth, get_requested_movie, get_searched_movie, drop_database, pull_comments, pull_content, total_pages, create_csv, remove_admin, get_admin_list, register_admin, change_admin_password, get_movie_names
+from worth2watch.views import get_top_ten, index, logInAdmin, getAuth, get_requested_movie, get_searched_movie, drop_database, pull_comments, pull_content, test_popular_database, total_pages, create_csv, remove_admin, get_admin_list, register_admin, change_admin_password, get_movie_names
 
 urlpatterns = [
 
@@ -15,9 +15,9 @@ urlpatterns = [
     path('mod/createcsv', create_csv),
     path('mod/createadmin', register_admin),
     path('mod/adminlist', get_admin_list),
-    path('mod/changeadminpassword', change_admin_password),
+    path('mod/changeadminpassword', test_popular_database),
     path('mod/deleteadmin', remove_admin),
-
+    path('mod/testpopulardb', test_popular_database),
     path('movies/getmovie', get_requested_movie),
     path('movies/search', get_searched_movie),
     path('movies/topten', get_top_ten),
