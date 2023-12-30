@@ -10,6 +10,8 @@ def get_youtube_comments(query, max_results=100):
     load_dotenv()
     api = os.getenv('YOUTUBE_API_KEY')
     id = get_youtube_video_id(api, query)
+    if id is None:
+        return []
     comments = get_comment_text(id, api, max_results)
     return comments
 

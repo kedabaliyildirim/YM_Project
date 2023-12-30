@@ -10,8 +10,8 @@ def movie_names():
                 "_id": "$movieName",
             }
         }
-    ]  
-    
+    ]
+
     response = collection("content").aggregate(agragetion)
     for doc in response:
         movie_dict = {
@@ -25,49 +25,47 @@ def movie_names():
 def add_comments_to_movie(movie_name, reddit_comments, youtube_comments):
     print("@add_comments_to_movie for : ", movie_name, "reddit_comments: ",
           len(reddit_comments), "youtube_comments: ", len(youtube_comments))
+
     if len(reddit_comments) == 0 and len(youtube_comments) == 0:
         return
-    elif len(reddit_comments) == 0:
+
+    existing_comments = collection("content").find_one(
+        {'movieName': movie_name}, {'Comments': 1})
+
+    if existing_comments is None:
+        # No existing comments, insert the new ones
         update_data = {
             "$set": {
                 "Comments": {
+                    "redditComments": reddit_comments,
                     "youtubeComments": youtube_comments
                 }
             }
         }
-        collection("content").update_one(
-            {'movieName': movie_name}, update_data)
-        return
-    elif len(youtube_comments) == 0:
+    else:
+        # Merge existing comments with new ones
         update_data = {
             "$set": {
                 "Comments": {
-                    "redditComments": reddit_comments
+                    "redditComments": existing_comments['Comments'].get('redditComments', []) + reddit_comments,
+                    "youtubeComments": existing_comments['Comments'].get('youtubeComments', []) + youtube_comments
                 }
             }
         }
-        collection("content").update_one(
-            {'movieName': movie_name}, update_data)
-        return
 
-    update_data = {
-        "$set": {
-            "Comments": {
-                "redditComments": reddit_comments,
-                "youtubeComments": youtube_comments
-            }
-        }
-    }
-    collection("content").update_one({'movieName': movie_name}, update_data)
+    collection("content").update_one(
+        {'movieName': movie_name}, update_data, upsert=True)
 
 
 def db_sentiment_analysis(comment, sentiment_analysis, comment_type):
     if comment_type == "reddit":
         query = {"Comments.redditComments.comment": comment}
-        collection("content").update_one(query, {"$set": {"Comments.redditComments.$.sentiment": sentiment_analysis}})
+        collection("content").update_one(
+            query, {"$set": {"Comments.redditComments.$.sentiment": sentiment_analysis}})
     else:
         query = {"Comments.youtubeComments.comment": comment}
-        collection("content").update_one(query, {"$set": {"Comments.youtubeComments.$.sentiment": sentiment_analysis}})
+        collection("content").update_one(
+            query, {"$set": {"Comments.youtubeComments.$.sentiment": sentiment_analysis}})
     return {"status": "ok"}
 
 
