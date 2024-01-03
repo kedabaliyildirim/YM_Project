@@ -1,7 +1,7 @@
 import json
 from django.http import JsonResponse
 from worth2watch.Database.admin.adminLogins import isAuth
-from worth2watch.Database.comment_db.comment_requests import get_comments, movie_names
+from worth2watch.Database.comment_db.comment_requests import empty_youtube_comments, get_comments, movie_names, print_empty_comments
 from worth2watch.Users.Admin.loginResponse import adminLoginResponse
 
 from worth2watch.Database.content.DatabaseRequests import acquire_top_ten, getPaginatedData, getRequestedMovie, getSearchedMovie, totalPages
@@ -210,5 +210,26 @@ def get_all_comments(request):
     if isAuth(payload.get('authToken')):
         comments = get_comments()
         return JsonResponse(comments, safe=False)
+    else:
+        return JsonResponse({'status': 'not authorized'})
+    
+
+@csrf_exempt
+@require_POST
+def check_empty_comments(request):
+    payload = json.loads(request.body.decode('utf-8'))
+    if isAuth(payload.get('authToken')):
+        empty_list = print_empty_comments()
+        return JsonResponse(empty_list, safe=False)
+    else:
+        return JsonResponse({'status': 'not authorized'})
+    
+@csrf_exempt
+@require_POST
+def youtube_empty_comments(request):
+    payload = json.loads(request.body.decode('utf-8'))
+    if isAuth(payload.get('authToken')):
+        empty_list = empty_youtube_comments()
+        return JsonResponse(empty_list, safe=False)
     else:
         return JsonResponse({'status': 'not authorized'})

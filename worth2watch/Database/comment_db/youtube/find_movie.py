@@ -36,6 +36,9 @@ def get_youtube_video_id(api_key, query):
                 print(f"Error extracting information: {e}")
     except HTTPError as e:
         return None
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
     return video_id
 
 # if __name__ == '__main__':

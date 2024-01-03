@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import os
 
 
-def get_youtube_comments(query, max_results=100):
+def get_youtube_comments(query, max_results=20):
     load_dotenv()
     api = os.getenv('YOUTUBE_API_KEY')
     id = get_youtube_video_id(api, query)

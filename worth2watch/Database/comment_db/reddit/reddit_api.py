@@ -1,12 +1,21 @@
 import os
 import praw
 
+import logging
 
 def search_reddit(movie_name, search_limit, thread_depth, comment_limit):
+        
+    # handler = logging.StreamHandler()
+    # handler.setLevel(logging.DEBUG)
+    # for logger_name in ("praw", "prawcore"):
+    #     logger = logging.getLogger(logger_name)
+    #     logger.setLevel(logging.DEBUG)
+    #     logger.addHandler(handler)
     reddit = praw.Reddit(
         client_id=os.getenv('REDDIT_API_ID'),
         client_secret=os.getenv('REDDIT_API_KEY'),
         user_agent='worth2watch',
+        ratelimit_seconds=300,
     )
 
     subreddit = reddit.subreddit('movies')
@@ -41,7 +50,3 @@ def search_reddit(movie_name, search_limit, thread_depth, comment_limit):
                 print(f"Error processing comment: {e}")
 
     return all_comments
-
-
-# comments_list = search_reddit("Tiny and Ruby: Hell Divin' Women", 1, 1, 40)
-# print(comments_list)

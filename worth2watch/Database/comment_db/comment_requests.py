@@ -1,4 +1,5 @@
 from bson import ObjectId
+from worth2watch import agent_main
 from worth2watch.Database.DatabaseModel.contentModel import createCollection as collection
 
 
@@ -28,33 +29,24 @@ def add_comments_to_movie(movie_name, reddit_comments, youtube_comments):
 
     if len(reddit_comments) == 0 and len(youtube_comments) == 0:
         return
-
-    existing_comments = collection("content").find_one(
-        {'movieName': movie_name}, {'Comments': 1})
-
-    if existing_comments is None:
-        # No existing comments, insert the new ones
-        update_data = {
-            "$set": {
-                "Comments": {
-                    "redditComments": reddit_comments,
-                    "youtubeComments": youtube_comments
-                }
-            }
-        }
-    else:
-        # Merge existing comments with new ones
-        update_data = {
-            "$set": {
-                "Comments": {
-                    "redditComments": existing_comments['Comments'].get('redditComments', []) + reddit_comments,
-                    "youtubeComments": existing_comments['Comments'].get('youtubeComments', []) + youtube_comments
-                }
-            }
-        }
-
-    collection("content").update_one(
-        {'movieName': movie_name}, update_data, upsert=True)
+    try:
+        doc = collection("content").find_one({"movieName": movie_name})
+        try:
+            reddit_comments = doc["Comments"]["redditComments"] + reddit_comments
+        except:
+            pass
+        try:
+            youtube_comments = doc["Comments"]["youtubeComments"] + youtube_comments
+        except:
+            pass
+        query = {"movieName": movie_name}
+        collection("content").update_one(
+            query, {"$set": {"Comments.redditComments": reddit_comments, "Comments.youtubeComments": youtube_comments}})
+        return {"status": "ok"}
+    
+    except Exception as e :
+        print(e)
+        return {"status": "error"}
 
 
 def db_sentiment_analysis(comment, sentiment_analysis, comment_type):
@@ -94,3 +86,32 @@ def get_comments():
     comments = [reddit_comments, youtube_comments]
 
     return comments
+
+
+def print_empty_comments():
+    empty_comments = collection('content').find({"Comments" : {"$exists" : False}})
+    empty_names = []
+    for col in empty_comments:
+        empty_names.append(col['movieName'])
+    return empty_names
+
+def empty_youtube_comments():
+    aggregate = [
+        {
+            "$match": {
+                "Comments.youtubeComments": []
+            }
+        },
+        {
+            "$group": {
+                "_id": "$movieName"
+            }
+        }
+    ]
+    movie_names = []
+    coll = collection("content").aggregate(aggregate)
+    for doc in coll:
+        movie_names.append(doc["_id"])
+
+
+    return movie_names

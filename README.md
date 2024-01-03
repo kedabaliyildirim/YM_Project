@@ -13,7 +13,7 @@ you can use
 or if you are using Vscode you can switch from the bottom left corner to test branch and pull from there
 
 # IMPORTANT
-
+https://rustup.rs
 If you have local changes and want to pull from git use
 
         git stash
