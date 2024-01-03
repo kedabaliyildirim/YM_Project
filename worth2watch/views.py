@@ -109,6 +109,7 @@ def remove_admin(request):
 @require_POST
 def get_requested_movie(request):
     payload = json.loads(request.body.decode('utf-8'))
+    print(payload)
     moviePOBJ = getRequestedMovie(payload)
     if getRequestedMovie(payload) is not None:
         return JsonResponse(moviePOBJ, safe=False)
@@ -134,16 +135,8 @@ def pull_content(request):
 
     # Check if the request is authorized
     if isAuth(payload.get('authToken')):
-        start_year = int(payload.get('startYear'))
-        end_year = int(payload.get('endYear'))
-        # Use range to iterate through years in intervals of 5
-        for year in range(start_year, end_year + 1, 1):
-            if year % 3 == 0:
-                print(f"Pulling content for {year}...")
-                accquireData(year)
-
+        accquireData()
         create_csv_from_database()
-
         return JsonResponse({'status': 'ok'})
     else:
         return JsonResponse({'status': 'not authorized'})
@@ -153,8 +146,8 @@ def pull_content(request):
 @require_POST
 def drop_database(request):
     payload = json.loads(request.body.decode('utf-8'))
-    if isAuth(payload):
-        removeData()
+    if isAuth(payload.get('authToken')):
+        removeData(payload.get('databaseName'))
         return JsonResponse({'status': 'ok'})
     else:
         return JsonResponse({'status': 'not authorized'})

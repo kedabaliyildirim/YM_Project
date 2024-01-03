@@ -2,10 +2,10 @@ import shutil
 from worth2watch.Database.DatabaseModel.contentModel import createCollection as collection
 
 
-def removeData():
+def removeData(db_to_be_dropped):
     try:
         # Drop the database collection
-        collection("content").drop()
+        collection(db_to_be_dropped).drop()
         print("Collection dropped successfully.")
     except Exception as e:
         print(f"Error dropping collection: {e}")

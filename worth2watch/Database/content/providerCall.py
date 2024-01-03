@@ -1,52 +1,29 @@
 import requests
-from requests.adapters import HTTPAdapter
-import dotenv
 import os
 import time
+import dotenv
 
 dotenv.load_dotenv()
 
-url = "https://api.themoviedb.org/3/movie/{}/watch/providers"
-authToken = os.getenv("AUTHORIZATION_TOKEN")
-headers = {
+TMDB_URL = "https://api.themoviedb.org/3/movie/{}/watch/providers"
+
+TMDB_HEADERS = {
     "accept": "application/json",
-    "Authorization": f"Bearer {authToken}"
+    "Authorization": f"Bearer {os.getenv('AUTHORIZATION_TOKEN')}"
 }
 
 
-def getProvidersWithRetry(movieId, max_retries=3, delay_seconds=1):
-    for attempt in range(max_retries + 1):
-        try:
-            providerResponse = requests.get(
-                url.format(movieId), headers=headers)
-            providerResponse.raise_for_status()
-            providerOBJ = providerResponse.json()
+def get_providers_with_retry(movie_id, max_retries=2, delay_seconds=1):
+    print(f"Getting providers for movie {movie_id}...")
+    provider_response = requests.get(
+        TMDB_URL.format(movie_id), headers=TMDB_HEADERS)
+    provider_response.raise_for_status()
+    provider_obj = provider_response.json()
 
-            if providerOBJ["results"] == {}:
-                return None
+    if not provider_obj["results"]:
+        return None
 
-            movie_providers = {}
-
-            for region, options in providerOBJ["results"].items():
-                if "buy" in options:
-                    movie_providers[region] = options["buy"]
-
-            return movie_providers
-
-        except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError) as e:
-            print(f"Error on attempt {attempt + 1}: {e}")
-            if attempt < max_retries:
-                if attempt > 0:
-                    print(f"Retrying in {delay_seconds} seconds...")
-                    time.sleep(delay_seconds)
-            else:
-                print(f"Max retries reached. Giving up.")
-                return None
-        except Exception as e:
-            print(f"Unexpected error: {e}")
-            return None
-
-
-# Usage
-# result = getProvidersWithRetry(5375264)
-# print(result)
+    movie_providers = {
+        region: options["buy"] for region, options in provider_obj["results"].items() if "buy" in options
+    }
+    return movie_providers

@@ -25,4 +25,6 @@ def createCollection(type):
         return collection_name
     elif (type == "popular_movies"):
         collection_name = dbname["popular_movies"]
+        index_model = IndexModel([("movieName", ASCENDING)], unique=True)
+        collection_name.create_indexes([index_model])
         return collection_name

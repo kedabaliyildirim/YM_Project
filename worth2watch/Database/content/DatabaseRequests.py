@@ -113,8 +113,7 @@ def totalPages(page_size):
 
 
 def getRequestedMovie(movieId):
-    objInstance = ObjectId(movieId)
-    document = collection("content").find_one({"_id": objInstance})
+    document = collection("content").find_one({"movieName" : movieId})
     json_document = json_util.dumps(document)
     return json_document
 
@@ -151,31 +150,36 @@ def getSearchedMovie(searchedMovie):
 
 
 def acquire_top_ten():
-    print("@acquire_top_ten")
-    if collection("popular_movies").count_documents({}) > 0:
-        print("database is not empty")
-        today = datetime.datetime.now()
-        dbExpiryDate = collection("popular_movies").find_one(
-            {"expiry_date": {"$exists": True}})
-        if dbExpiryDate is not None:
-            if dbExpiryDate["expiry_date"] > today:
-                databaseOBJ = collection("popular_movies").find({}).limit(10)
-                json_documents = [json_util.dumps(doc) for doc in databaseOBJ]
-                return json_documents
-            else:
-                print("Popular movies are not up to date")
-                collection("popular_movies").drop()
-                print("Popular movies are dropped")
+    try:
+        print("@acquire_top_ten")
+        if collection("popular_movies").count_documents({}) > 0:
+            print("database is not empty")
+            today = datetime.datetime.now()
+            dbExpiryDate = collection("popular_movies").find_one(
+                {"expiry_date": {"$exists": True}})
+            if dbExpiryDate is not None:
+                if dbExpiryDate["expiry_date"] > today:
+                    databaseOBJ = collection("popular_movies").find({}).limit(10)
+                    json_documents = [json_util.dumps(doc) for doc in databaseOBJ]
+                    return json_documents
+                else:
+                    print("Popular movies are not up to date")
+                    collection("popular_movies").drop()
+                    print("Popular movies are dropped")
 
-                get_popular_movies()
-                databaseOBJ = collection("popular_movies").find({}).limit(10)
-                json_documents = [json_util.dumps(doc) for doc in databaseOBJ]
-                return json_documents
-    else:
-        print("Popular movies are not in the database")
-        get_popular_movies()
-        databaseOBJ = collection("popular_movies").find({}).limit(10)
-        json_documents = [json_util.dumps(doc) for doc in databaseOBJ]
-        return json_documents
+                    get_popular_movies()
+                    databaseOBJ = collection("popular_movies").find({}).limit(10)
+                    json_documents = [json_util.dumps(doc) for doc in databaseOBJ]
+                    return json_documents
+        else:
+            print("Popular movies are not in the database")
+            get_popular_movies()
+            databaseOBJ = collection("popular_movies").find({}).limit(10)
+            json_documents = [json_util.dumps(doc) for doc in databaseOBJ]
+    except Exception as e:
+        print(e)
+        return None
+    
+    return json_documents
 
 

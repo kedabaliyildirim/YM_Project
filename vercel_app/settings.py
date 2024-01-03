@@ -71,7 +71,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://github.com",
     "http://localhost:5173",
-    "https://worth2-watch-front-end.vercel.app"  # Add the URL of your Vue.js app
+    "https://worth2-watch-front-end.vercel.app",
+    # Add the URL of your Vue.js app
+    "https://worth2-watch-front-jr6f9olki-kedabaliyildirims-projects.vercel.app"
     # Add other allowed origins as needed
 ]
 CORS_ALLOW_HEADERS = [
