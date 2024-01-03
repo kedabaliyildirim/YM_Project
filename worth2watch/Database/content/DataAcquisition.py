@@ -97,10 +97,10 @@ def accquireData():
     global global_counter
     import datetime
     pageNo = 1
-    while global_counter != 400:
+    while global_counter < 400:
         current_datetime =datetime.datetime.now() - datetime.timedelta(days=30)
         current_datetime = current_datetime.strftime("%Y-%m-%d") 
-        contentURI = f"https://api.themoviedb.org/3/discover/movie?include_adult=false&certification=PG|M&region=US&include_video=false&with_release_type=2|3|4&with_runtime.gte=80&with_original_language=en&page={pageNo}&primary_release_date.lte={current_datetime}&sort_by=primary_release_date.desc"
+        contentURI = f"https://api.themoviedb.org/3/discover/movie?include_adult=false&certification=PG|M&region=US&include_video=false&with_release_type=2|3|4&with_runtime.gte=80&with_original_language=en&page={pageNo}&primary_release_date.lte={current_datetime}&sort_by=popularity.desc"
         headers = {
             "accept": "application/json",
             "Authorization": f"Bearer {authToken}"
