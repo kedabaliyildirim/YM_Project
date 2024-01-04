@@ -4,8 +4,6 @@ from requests import HTTPError
 
 def get_youtube_video_id(api_key, query):
     youtube = build('youtube', 'v3', developerKey=api_key)
-    
-    movie_names_storage = open("movie_names.txt", "a")
     try:
         search_response = youtube.search().list(
             q=query,
