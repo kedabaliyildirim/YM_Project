@@ -1,5 +1,6 @@
 import json
 from django.http import JsonResponse
+from worth2watch.Database.test.database_test import test_main
 from worth2watch.Database.admin.adminLogins import isAuth
 from worth2watch.Database.comment_db.comment_requests import empty_youtube_comments, get_comments, movie_names, print_empty_comments
 from worth2watch.Users.Admin.loginResponse import adminLoginResponse
@@ -233,3 +234,16 @@ def youtube_empty_comments(request):
         return JsonResponse(empty_list, safe=False)
     else:
         return JsonResponse({'status': 'not authorized'})
+    
+
+@csrf_exempt
+@require_POST
+def database_test_main(request):
+    payload = json.loads(request.body.decode('utf-8'))
+    if isAuth(payload.get('authToken')):
+        if test_main() == 'ok':
+            return JsonResponse({'status': 'ok'})
+        else:
+            return JsonResponse({'status': 'failed'})
+    else:
+        return JsonResponse({'status' : 'not authoruzed'})
