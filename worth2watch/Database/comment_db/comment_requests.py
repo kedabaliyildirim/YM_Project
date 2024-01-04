@@ -2,7 +2,7 @@ from bson import ObjectId
 import random
 from worth2watch import agent_main
 from worth2watch.Database.DatabaseModel.contentModel import createCollection as collection
-from worth2watch.Database.comment_db.sentiment_analysis import analyze_and_summarize_sentiments
+
 from worth2watch.Database.comment_db.sentiment_analysis2 import calculate_sentiment_ratios , analyze_sentiment
 
 
