@@ -38,14 +38,14 @@ def analyze_and_summarize_sentiments(sentences, model_name="distilbert-base-unca
     return result_dict
 
 
-# Test etmek için örnek bir kullanım
-sentences_to_analyze = ["I love this movie", "I don't like this movie", "Meh"]
-result = analyze_and_summarize_sentiments(sentences_to_analyze)
+# # Test etmek için örnek bir kullanım
+# sentences_to_analyze = ["I love this movie", "I don't like this movie", "Meh"]
+# result = analyze_and_summarize_sentiments(sentences_to_analyze)
 
-print("Sentiments:", result["sentiments"])
-# Assuming result is a dictionary with "positive_ratio" and "negative_ratio" keys
+# print("Sentiments:", result["sentiments"])
+# # Assuming result is a dictionary with "positive_ratio" and "negative_ratio" keys
 
-print("Positive Ratio: {:.2f}%".format(result["positive_ratio"] * 100))
-print("Negative Ratio: {:.2f}%".format(result["negative_ratio"] * 100))
+# print("Positive Ratio: {:.2f}%".format(result["positive_ratio"] * 100))
+# print("Negative Ratio: {:.2f}%".format(result["negative_ratio"] * 100))
 
-print("Total Count:", result["total_count"])
+# print("Total Count:", result["total_count"])
