@@ -1,17 +1,5 @@
 # YM_Project
 
-First and foremost switch to test branch
-
-        git checkout test
-
-if you have local changes look below
-
-you can use
-
-        git pull origin test
-
-or if you are using Vscode you can switch from the bottom left corner to test branch and pull from there
-
 # IMPORTANT
 https://rustup.rs
 If you have local changes and want to pull from git use
@@ -33,9 +21,14 @@ to clone
 
 After cloning the repo, create a virtual environment and activate it
 
+        python -m venv .\w2w
+
         .\w2w\Scripts\activate
 
+the name is important because it is in the .gitignore file
 to install requirements
+one dependency is a bit different to use it you need to install c++ build tools after that install rust and cargo from https://rustup.rs
+
 use
 
         pip install -r requirements.txt
@@ -46,8 +39,6 @@ use
 
 # Server
 
-.vercel file is not on github get it from the Google Drive, unzip it paste it to root directory of the project like .env filename
-
 to run locally use
 
         python manage.py runserver
@@ -56,13 +47,6 @@ if installed any new packages use
 
         pip freeze > requirements.txt
 
-to push to git use
-
-        git add .
-        git commit -m "commit message"
-        git push origin test
-
-always push to test branch first, merge will be done by @kedabaliyildirim
 
 # The Project
 

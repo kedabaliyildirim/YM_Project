@@ -1,6 +1,8 @@
 from bson import ObjectId
+import random
 from worth2watch import agent_main
 from worth2watch.Database.DatabaseModel.contentModel import createCollection as collection
+from worth2watch.Database.comment_db.sentiment_analysis import analyze_and_summarize_sentiments
 
 
 def movie_names():
@@ -10,7 +12,8 @@ def movie_names():
             "$group": {
                 "_id": "$movieName",
             }
-        }
+        },
+        
     ]
 
     response = collection("content").aggregate(agragetion)
@@ -32,33 +35,47 @@ def add_comments_to_movie(movie_name, reddit_comments, youtube_comments):
     try:
         doc = collection("content").find_one({"movieName": movie_name})
         try:
-            reddit_comments = doc["Comments"]["redditComments"] + reddit_comments
+            reddit_comments = doc["Comments"]["redditComments"] + \
+                reddit_comments
         except:
             pass
         try:
-            youtube_comments = doc["Comments"]["youtubeComments"] + youtube_comments
+            youtube_comments = doc["Comments"]["youtubeComments"] + \
+                youtube_comments
         except:
             pass
         query = {"movieName": movie_name}
         collection("content").update_one(
             query, {"$set": {"Comments.redditComments": reddit_comments, "Comments.youtubeComments": youtube_comments}})
         return {"status": "ok"}
-    
-    except Exception as e :
+
+    except Exception as e:
         print(e)
         return {"status": "error"}
 
 
-def db_sentiment_analysis(comment, sentiment_analysis, comment_type):
-    if comment_type == "reddit":
-        query = {"Comments.redditComments.comment": comment}
-        collection("content").update_one(
-            query, {"$set": {"Comments.redditComments.$.sentiment": sentiment_analysis}})
-    else:
-        query = {"Comments.youtubeComments.comment": comment}
-        collection("content").update_one(
-            query, {"$set": {"Comments.youtubeComments.$.sentiment": sentiment_analysis}})
-    return {"status": "ok"}
+def db_sentiment_analysis(is_reddit=False, is_youtube=False, movieName=None):
+    if is_reddit:
+        aggragete_pipeline = [
+            {
+                "$match": {
+                    "movieName": movieName
+                }
+            },
+            {
+                "$group": {
+                    "_id": "$Comments.redditComments.comment",
+                }
+            }
+           
+        ]
+        docs = collection("content").aggregate(aggragete_pipeline)
+        for doc in docs:
+            for comment in doc["_id"]:
+                print(comment)
+                get_random_no =  random.randint(1, 10)
+                collection("content").find_one_and_update({"Comments.redditComments.comment": comment}, {
+                    "$set": {"Comments.redditComments.$.sentiment": get_random_no}})
 
 
 def get_comments():
@@ -89,11 +106,13 @@ def get_comments():
 
 
 def print_empty_comments():
-    empty_comments = collection('content').find({"Comments" : {"$exists" : False}})
+    empty_comments = collection('content').find(
+        {"Comments": {"$exists": False}})
     empty_names = []
     for col in empty_comments:
         empty_names.append(col['movieName'])
     return empty_names
+
 
 def empty_youtube_comments():
     aggregate = [
@@ -113,5 +132,27 @@ def empty_youtube_comments():
     for doc in coll:
         movie_names.append(doc["_id"])
 
-
     return movie_names
+
+
+def reddit_comments():
+    agragetion_pipeline = [
+        {
+            '$project': {
+                '_id': 0,
+                'movieName': 1,
+                'Comments': '$Comments.redditComments.comment'
+            }
+        }
+    ]
+    coll = collection("content").aggregate(agragetion_pipeline)
+    for doc in coll:
+        for comment in doc["Comments"]:
+            print(comment)
+            # TODO: connect to sentiment analysis and add sentiment to comment object
+            analysed_comment = {
+                "comment": comment,
+                "sentiment": "VAL"
+            }
+            collection("test_sentiment").find_one_and_update({"Comments.redditComments.comment": comment}, {
+                "$set": {"Comments.redditComments.$": analysed_comment}})

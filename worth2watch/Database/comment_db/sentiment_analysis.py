@@ -44,8 +44,13 @@ def analyze_and_summarize_sentiments(sentences, model_name="distilbert-base-unca
 
 # print("Sentiments:", result["sentiments"])
 # # Assuming result is a dictionary with "positive_ratio" and "negative_ratio" keys
+# print("Sentiments:", result["sentiments"])
+# # Assuming result is a dictionary with "positive_ratio" and "negative_ratio" keys
 
 # print("Positive Ratio: {:.2f}%".format(result["positive_ratio"] * 100))
 # print("Negative Ratio: {:.2f}%".format(result["negative_ratio"] * 100))
+# print("Positive Ratio: {:.2f}%".format(result["positive_ratio"] * 100))
+# print("Negative Ratio: {:.2f}%".format(result["negative_ratio"] * 100))
 
+# print("Total Count:", result["total_count"])
 # print("Total Count:", result["total_count"])
