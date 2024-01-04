@@ -1,21 +1,9 @@
 from googleapiclient.discovery import build
 from requests import HTTPError
 
-def storage_checker(movie_names, path="movie_names.txt"):
-    try:
-        movie_names_storage = open(path, "r")
-        movie_names = movie_names_storage.readlines()
-        movie_names_storage.close()
-    except FileNotFoundError:
-        movie_names = []
-    return movie_names
 
 def get_youtube_video_id(api_key, query):
     youtube = build('youtube', 'v3', developerKey=api_key)
-    storage_status = storage_checker(query)
-    if query in storage_status:
-        print("Already searched")
-        return None
     
     movie_names_storage = open("movie_names.txt", "a")
     try:
@@ -24,7 +12,7 @@ def get_youtube_video_id(api_key, query):
             part='snippet',
             maxResults=1
         ).execute()
-        movie_names_storage.write(f"{query}\n")
+        
         video_id = None
         for search_result in search_response.get('items', []):
             try:
