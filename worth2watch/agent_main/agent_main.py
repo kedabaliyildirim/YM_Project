@@ -1,6 +1,7 @@
 from worth2watch.Database.comment_db.reddit.reddit_api import search_reddit
 from worth2watch.Database.comment_db.youtube.yt_trailer_comments import get_youtube_comments
 from worth2watch.Database.comment_db.comment_requests import add_comments_to_movie, db_sentiment_analysis, get_comments
+from worth2watch.Database.comment_db.sentiment_analysis2 import calculate_sentiment_ratios, analyze_sentiment
 def main_agent(movie_name, reddit_status, youtube_status):
     if reddit_status:
         print("@main_agent for : ", movie_name, "reddit_status: ", reddit_status, "youtube_status: ", youtube_status)
