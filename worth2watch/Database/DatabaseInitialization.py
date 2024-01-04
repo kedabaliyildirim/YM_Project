@@ -17,5 +17,3 @@ if __name__ == "__main__":
 
     # Get the database
     dbname = initDatabase()
-
-

@@ -1,9 +1,13 @@
 from transformers import pipeline
-
+import time
 def analyze_sentiment_transformers(sentence, model_name="distilbert-base-uncased-finetuned-sst-2-english"):
+    start_date = time.time()
     sentiment_analyzer = pipeline("sentiment-analysis", model=model_name, revision="714eb0f")
     result = sentiment_analyzer(sentence)[0]
     sentiment_type = result['label']
+    end_date = time.time()
+    time_elapsed = end_date - start_date
+    print("Time elapsed for sentiment analysis: {:.2f} seconds".format(time_elapsed))
     return sentiment_type
 
 def analyze_sentiments(sentences, model_name="distilbert-base-uncased-finetuned-sst-2-english"):
@@ -33,8 +37,9 @@ def analyze_and_summarize_sentiments(sentences, model_name="distilbert-base-unca
     
     return result_dict
 
+
 # Test etmek için örnek bir kullanım
-sentences_to_analyze = ["This is a positive sentence.", "This is a negative sentence.", "Another positive one."]
+sentences_to_analyze = ["I love this movie", "I don't like this movie", "Meh"]
 result = analyze_and_summarize_sentiments(sentences_to_analyze)
 
 print("Sentiments:", result["sentiments"])
