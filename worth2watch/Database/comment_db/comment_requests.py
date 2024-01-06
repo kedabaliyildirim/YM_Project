@@ -3,7 +3,7 @@ import random
 from worth2watch import agent_main
 from worth2watch.Database.DatabaseModel.contentModel import createCollection as collection
 
-from worth2watch.Database.comment_db.sentiment_analysis import calculate_sentiment_ratios , analyze_sentiment
+from worth2watch.Database.comment_db.sentiment_analysis import analyze_sentiment
 
 
 def movie_names():
@@ -74,13 +74,12 @@ def db_sentiment_analysis(is_reddit=False, is_youtube=False, movieName=None):
            
         ]
         docs = collection("content").aggregate(aggragete_pipeline)
-        
+        print(movieName["movieName"])
         # bir filmin bütün commentlerini alıyor (liste)
         for doc in docs:
-            # o filmin commentlerini teker teker sıralıyor
             for comment in doc["_id"]:
                 print(comment)
-                comment_score = analyze_sentiment([comment])
+                comment_score = analyze_sentiment(comment)
                 collection("content").find_one_and_update({"Comments.redditComments.comment": comment}, {
                     "$set": {"Comments.redditComments.$.sentiment": comment_score}})
                 
