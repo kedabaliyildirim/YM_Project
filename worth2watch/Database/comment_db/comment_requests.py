@@ -14,7 +14,7 @@ def movie_names():
                 "_id": "$movieName",
             }
         },
-        
+
     ]
 
     response = collection("content").aggregate(agragetion)
@@ -60,7 +60,8 @@ def db_sentiment_analysis(is_reddit=False, is_youtube=False, movieName=None):
   
     
     if is_reddit:
-        aggragete_pipeline = [
+        print(movieName)
+        pipeline = [
             {
                 "$match": {
                     "movieName":movieName["movieName"]
@@ -73,7 +74,7 @@ def db_sentiment_analysis(is_reddit=False, is_youtube=False, movieName=None):
             }
            
         ]
-        docs = collection("content").aggregate(aggragete_pipeline)
+        docs = collection("content").aggregate(pipeline)
         print(movieName["movieName"])
         # bir filmin bütün commentlerini alıyor (liste)
         for doc in docs:
@@ -164,3 +165,7 @@ def reddit_comments():
             }
             collection("test_sentiment").find_one_and_update({"Comments.redditComments.comment": comment}, {
                 "$set": {"Comments.redditComments.$": analysed_comment}})
+
+
+def delete_comments():
+    collection('content').update_many({}, {"$unset": {"Comments": ""}})

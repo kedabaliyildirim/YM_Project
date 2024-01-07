@@ -2,7 +2,7 @@ import json
 from django.http import JsonResponse
 from worth2watch.Database.test.database_test import test_main
 from worth2watch.Database.admin.adminLogins import isAuth
-from worth2watch.Database.comment_db.comment_requests import db_sentiment_analysis, empty_youtube_comments, get_comments, movie_names, print_empty_comments
+from worth2watch.Database.comment_db.comment_requests import db_sentiment_analysis, delete_comments, empty_youtube_comments, get_comments, movie_names, print_empty_comments
 from worth2watch.Users.Admin.loginResponse import adminLoginResponse
 
 from worth2watch.Database.content.DatabaseRequests import acquire_top_ten, getPaginatedData, getRequestedMovie, getSearchedMovie, totalPages
@@ -16,7 +16,6 @@ from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 
 from worth2watch.agent_main.agent_main import main_agent
-
 
 
 @csrf_exempt
@@ -177,10 +176,12 @@ def pull_comments(request):
         is_youtube = payload.get('platform')['youtube']
         movie_name = payload.get('movie')['movieName']
         # print("is_reddit: ", is_reddit, " is_youtube: ", is_youtube, " movie_name: ", movie_name, " movie_id: ", movie_id)
-        main_agent(movie_name=movie_name, reddit_status=is_reddit, youtube_status=is_youtube)
+        main_agent(movie_name=movie_name, reddit_status=is_reddit,
+                   youtube_status=is_youtube)
         return JsonResponse({'status': 'ok'})
     else:
         return JsonResponse({'status': 'not authorized'})
+
 
 @csrf_exempt
 @require_POST
@@ -191,7 +192,7 @@ def get_movie_names(request):
         return JsonResponse(movie_name, safe=False)
     else:
         return JsonResponse({'status': 'not authorized'})
-    
+
 
 @csrf_exempt
 @require_POST
@@ -202,7 +203,7 @@ def test_popular_database(request):
         return JsonResponse({'status': 'ok'})
     else:
         return JsonResponse({'status': 'not authorized'})
-    
+
 
 @csrf_exempt
 @require_POST
@@ -213,7 +214,7 @@ def get_all_comments(request):
         return JsonResponse(comments, safe=False)
     else:
         return JsonResponse({'status': 'not authorized'})
-    
+
 
 @csrf_exempt
 @require_POST
@@ -224,7 +225,8 @@ def check_empty_comments(request):
         return JsonResponse(empty_list, safe=False)
     else:
         return JsonResponse({'status': 'not authorized'})
-    
+
+
 @csrf_exempt
 @require_POST
 def youtube_empty_comments(request):
@@ -234,7 +236,7 @@ def youtube_empty_comments(request):
         return JsonResponse(empty_list, safe=False)
     else:
         return JsonResponse({'status': 'not authorized'})
-    
+
 
 @csrf_exempt
 @require_POST
@@ -244,11 +246,12 @@ def sent_analysis(request):
         is_reddit = payload.get('is_reddit')
         is_youtube = payload.get('is_youtube')
         movieName = payload.get('movieNames')
-        db_sentiment_analysis(is_reddit=is_reddit, is_youtube=is_youtube, movieName=movieName)
+        print(movieName["movieName"])
+        # db_sentiment_analysis(is_reddit=is_reddit, is_youtube=is_youtube, movieName=movieName)
         return JsonResponse({'status': 'ok'})
     else:
         return JsonResponse({'status': 'not authorized'})
-    
+
 
 @csrf_exempt
 @require_POST
@@ -260,4 +263,15 @@ def database_test_main(request):
         else:
             return JsonResponse({'status': 'failed'})
     else:
-        return JsonResponse({'status' : 'not authoruzed'})
+        return JsonResponse({'status': 'not authoruzed'})
+
+
+@csrf_exempt
+@require_POST
+def delete_comment(request):
+    payload = json.loads(request.body.decode('utf-8'))
+    if isAuth(payload.get('authToken')):
+        delete_comments()
+        return JsonResponse({'status': 'ok'})
+    else:
+        return JsonResponse({'status': 'not authorized'})
