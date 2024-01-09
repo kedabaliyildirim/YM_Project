@@ -1,7 +1,7 @@
 import json
 from django.http import JsonResponse
 from worth2watch.Database.test.database_test import test_main
-from worth2watch.Database.admin.adminLogins import isAuth
+from worth2watch.Database.admin.adminLogins import isAuth, logOutAdmin
 from worth2watch.Database.comment_db.comment_requests import db_sentiment_analysis, delete_comments, empty_youtube_comments, get_comments, movie_names, print_empty_comments
 from worth2watch.Users.Admin.loginResponse import adminLoginResponse
 
@@ -55,7 +55,17 @@ def logInAdmin(request):
         return JsonResponse({'status': 'ok', 'authToken': isAuth['authToken']})
     else:
         return JsonResponse({'status': 'wrong password'})
-
+@csrf_exempt
+@require_POST
+def log_out_admin(request):
+    payload = json.loads(request.body.decode('utf-8'))
+    if isAuth(payload.get('authToken')):
+        if logOutAdmin(payload.get('authToken')):
+            return JsonResponse({'status': 'ok'})
+        else:
+            return JsonResponse({'status': 'unexpected error'})
+    else:
+        return JsonResponse({'status': 'not authorized'})
 
 @csrf_exempt
 @require_POST
@@ -71,8 +81,10 @@ def register_admin(request):
 
 
 @csrf_exempt
+@require_POST
 def get_admin_list(request):
-    if isAuth(request.body.decode('utf-8')):
+    payload = json.loads(request.body.decode('utf-8'))
+    if isAuth(payload.get('authToken')):
         ad_list = admin_list()
         return JsonResponse(ad_list, safe=False)
     else:
@@ -258,10 +270,8 @@ def sent_analysis(request):
 def database_test_main(request):
     payload = json.loads(request.body.decode('utf-8'))
     if isAuth(payload.get('authToken')):
-        if test_main() == 'ok':
-            return JsonResponse({'status': 'ok'})
-        else:
-            return JsonResponse({'status': 'failed'})
+        test_results = test_main()
+        return JsonResponse(test_results, safe=False)
     else:
         return JsonResponse({'status': 'not authoruzed'})
 

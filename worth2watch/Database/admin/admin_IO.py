@@ -12,17 +12,33 @@ def admin_creation(payload):
         return {'status': 'ok'}
 
 def admin_list():
-    admin_list = collection('admin').find()
+    docs = collection('admin').find({"email": {"$exists": True}})
+    admin_list = []
+    for doc in docs:
+        admin_list.append(doc['email'])
     return admin_list
 
 def admin_removal(payload):
     email = payload.get('email')
-    if email is not None:
-        if collection('admin').count_documents({}) == 1:
-            return {'status': 'error', 'message': 'You cannot remove the last admin'}
+    if email is not None or email != '':
+        currentAdmin = collection("admin").find_one({'auth_string.token': payload.get('authToken')})
+        if currentAdmin['email'] != email:
+            if collection('admin').find_one({'email': email}) is not None:
+                if collection('admin').count_documents({}) == 1:
+                    return {'status': 'error', 'message': 'You cannot remove the last admin'}
+                else:
+                    try:
+                        collection('admin').delete_one({'email': email})
+                        return {'status': 'ok'}
+                    except Exception as e:
+                        print("Delete Error:", e)
+                        return {'status': 'error', 'message': 'Unexpected error'}
+            else:
+                return {'status': 'error', 'message': 'Admin not found'}
         else:
-            collection('admin').delete_one({'email': email})
-            return {'status': 'ok'}
+            return {'status': 'error', 'message': 'You cannot remove yourself'}
+    else:
+        return {'status': 'error', 'message': 'Admin not found'}
         
 def admin_password_change(payload):
     email = payload.get('email')

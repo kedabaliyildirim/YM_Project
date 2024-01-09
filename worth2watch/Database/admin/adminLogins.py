@@ -5,10 +5,8 @@ import base64
 
 def isAuth(payload):
     authState = collection('admin').find_one({'auth_string.token': payload})
-    print("@client isAuth")
-    checkExpiration = authState['auth_string']['auth_expiration_date'] > datetime.datetime.now(
-    )
-    print(checkExpiration)
+    checkExpiration = authState['auth_string']['auth_expiration_date'] > datetime.datetime.now()
+
     if (checkExpiration):
         return True
     else:
@@ -42,3 +40,10 @@ def create_basic_auth_string(username, password):
                  }})
     return auth_string['token']
 
+def logOutAdmin(payload):
+    try:
+        collection('admin').update_one({'auth_string.token': payload}, {'$unset': {'auth_string': ''}})
+    except Exception as e:
+        print("Logout Error:", e)
+        return False
+    return True

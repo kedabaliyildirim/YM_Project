@@ -28,54 +28,60 @@ def create(movie_info):
     try:
         # Insert movie information
         collection('test').insert_one(movie_info)
-        print("Create Result: Movie added successfully.")
+        return True
     except Exception as e:
         print("Create Error:", e)
+        return False
 
 def read(movie_name):
     try:
         # Read a specific movie
         result = collection('test').find_one({"movieName": movie_name})
         if result:
-            print("Read Result:", result)
+            return True
         else:
             print("Read Result: Movie not found.")
+            return False
     except Exception as e:
         print("Read Error:", e)
+        return False
 
 def update(movie_name, updated_info):
     try:
         # Update information of a specific movie
         collection('test').update_one({"movieName": movie_name}, {"$set": updated_info})
-        print("Update Result: Movie information updated successfully.")
+        return True
     except Exception as e:
         print("Update Error:", e)
+        return False
 
 def delete(movie_name):
     try:
         # Delete a specific movie
         collection('test').delete_one({"movieName": movie_name})
-        print("Delete Result: Movie deleted successfully.")
+        # print("Delete Result: Movie deleted successfully.")
+        return True
     except Exception as e:
         print("Delete Error:", e)
+        return False
 
 # Test functions
 def test_main():
     try:
-        create(movie_info)
-        read("Wizards of the Lost Kingdom II")
+        creation =create(movie_info)
+        reading = read("Wizards of the Lost Kingdom II")
 
         # Updated information
         updated_info = {
             "movieRuntime": "90 min",
         }
 
-        update("Wizards of the Lost Kingdom II", updated_info)
-        read("Wizards of the Lost Kingdom II")
+        updating =update("Wizards of the Lost Kingdom II", updated_info)
 
-        delete("Wizards of the Lost Kingdom II")
+        deleting = delete("Wizards of the Lost Kingdom II")
         read("Wizards of the Lost Kingdom II")
-        return 'ok'
+        test_results = [creation, reading, updating, deleting]
+        return test_results
     except Exception as e:
-        print("Failed")
+        print("Failed", e)
         return None
